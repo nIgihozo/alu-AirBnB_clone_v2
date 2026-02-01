@@ -5,13 +5,12 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import Base
-# from models.base_model import Base
-# from models.state import State
-# from models.city import City
-# from models.user import User
-# from models.place import Place
-# from models.review import Review
-# from models.amenity import Amenity
+from models.state import State
+from models.city import City
+from models.user import User
+from models.place import Place
+from models.review import Review
+from models.amenity import Amenity
 
 
 class DBStorage:
@@ -34,13 +33,6 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Query on the current database session"""
-        from models.state import State
-        from models.city import City
-        from models.user import User
-        from models.place import Place
-        from models.review import Review
-        from models.amenity import Amenity
         """returns a dictionary
         Return:
             returns a dictionary of __object
@@ -79,24 +71,14 @@ class DBStorage:
             self.session.delete(obj)
 
     def reload(self):
-        """Create all tables and the current session"""
-        from models.state import State
-        from models.city import City
-        from models.user import User
-        from models.place import Place
-        from models.review import Review
-        from models.amenity import Amenity
         """configuration
         """
         Base.metadata.create_all(self.__engine)
         sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sec)
-        self.__session = Session
+        self.__session = Session()
 
     def close(self):
         """ calls remove()
         """
         self.__session.close()
-
-
-
